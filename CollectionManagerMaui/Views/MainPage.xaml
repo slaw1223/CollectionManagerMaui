@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CollectionManagerMaui.Views.MainPage">
+    <VerticalStackLayout Margin="10">
+        <VerticalStackLayout VerticalOptions="Center">
+            <Label Text="Dodaj nową kolekcję:"/>
+            <Entry Placeholder="Nazwa kolekcji" Text="{Binding NewCollection.Name}"/>
+            <Button Text="Dodaj" Command="{Binding AddCollectionCommand}"/>
+        </VerticalStackLayout>
+
+        <ScrollView>
+            <Frame>
+                <CollectionView ItemsSource="{Binding Collections}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                <Button Text="Edytuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToEditCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
+        </ScrollView>
+    </VerticalStackLayout>
+</ContentPage>
