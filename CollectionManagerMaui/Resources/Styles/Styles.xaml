@@ -162,10 +162,6 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-    <Style TargetType="Label" x:Key="Input">
-        <Setter Property="Margin" Value="10,0,0,15"/>
-        <Setter Property="VerticalOptions" Value="Center"/>
-    </Style>
 
     <Style TargetType="Label">
         <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
@@ -195,6 +191,21 @@
         <Setter Property="FontSize" Value="32" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Title">
+        <Setter Property="FontSize" Value="40"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="TextColor" Value="{StaticResource Title}"/>
+    </Style>
+
+    <Style TargetType="Label" x:Key="Input">
+        <Setter Property="Margin" Value="10,0,0,15"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+    </Style>
+    <Style TargetType="Label" BasedOn="{StaticResource Title}" x:Key="InputTitle">
+        <Setter Property="FontSize" Value="20"/>
     </Style>
 
     <Style TargetType="Label" x:Key="SubHeadline">
@@ -401,13 +412,42 @@
 
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="Padding" Value="0"/>
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark=#697268}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark=#98B168}" />
+    </Style>
+
+    <Style TargetType="Frame" x:Key="NoBorder">
+        <Setter Property="BorderColor" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="Frame" x:Key="TitleContainer">
+        <Setter Property="BackgroundColor" Value="{StaticResource TitleContainer}" />
+        <Setter Property="CornerRadius" Value="0"/>
+        <Setter Property="BorderColor" Value="{StaticResource TitleContainer}"/>
+    </Style>
+
+
+    <Style TargetType="Frame" x:Key="InputContainer" BasedOn="{StaticResource NoBorder}">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="WidthRequest" Value="300"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource InputContainer}"/>
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelMargin">
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+    
+    <Style TargetType="Entry" x:Key="EntryMargin">
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+
+    <Style TargetType="Button" x:Key="ButtonMargin">
+        <Setter Property="Margin" Value="10"/>
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
-        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark=#4E5340}" />
+        <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource TitleContainer}}" />
         <Setter Property="Shell.ForegroundColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark=#697268}" />
-        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark=#313328}" />
+        <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Title}}" />
         <Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />
         <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />

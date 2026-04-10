@@ -9,7 +9,6 @@
     Title="CollectionManagerMaui">
 
     <ShellContent
-        Title="Home"
         ContentTemplate="{DataTemplate views:MainPage}" />
 
 </Shell>

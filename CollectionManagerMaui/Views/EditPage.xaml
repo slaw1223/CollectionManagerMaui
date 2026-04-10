@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CollectionManagerMaui.Views.EditPage">
     <VerticalStackLayout>
-        <Label Text="{Binding Collection.Name}" FontSize="40" HorizontalOptions="Center" Margin="5"/>
+        <Frame Style="{StaticResource TitleContainer}">
+            <Label Text="{Binding Collection.Name}" Style="{StaticResource Title}"/>
+        </Frame>
 
         <HorizontalStackLayout>
             <VerticalStackLayout HorizontalOptions="Center" Margin="5">

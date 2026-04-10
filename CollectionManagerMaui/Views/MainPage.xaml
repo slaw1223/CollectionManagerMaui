@@ -2,12 +2,17 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CollectionManagerMaui.Views.MainPage">
-    <VerticalStackLayout Margin="10">
-        <VerticalStackLayout VerticalOptions="Center">
-            <Label Text="Dodaj nową kolekcję:"/>
-            <Entry Placeholder="Nazwa kolekcji" Text="{Binding NewCollection.Name}"/>
-            <Button Text="Dodaj" Command="{Binding AddCollectionCommand}"/>
-        </VerticalStackLayout>
+    <VerticalStackLayout>
+        <Frame Style="{StaticResource TitleContainer}">
+            <Label Text="Wszystkie kolekcje" Style="{StaticResource Title}"/>
+        </Frame>
+        <Frame Style="{StaticResource InputContainer}">
+            <VerticalStackLayout VerticalOptions="Center">
+                <Label Text="Dodaj nową kolekcję:" Style="{StaticResource InputTitle}"/>
+                <Entry Placeholder="Nazwa kolekcji" Text="{Binding NewCollection.Name}" Style="{StaticResource EntryMargin}"/>
+                <Button Text="Dodaj" Command="{Binding AddCollectionCommand}" Style="{StaticResource ButtonMargin}"/>
+            </VerticalStackLayout>
+        </Frame>
 
         <ScrollView>
             <Frame>
