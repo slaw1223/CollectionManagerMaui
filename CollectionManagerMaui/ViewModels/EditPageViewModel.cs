@@ -72,6 +72,9 @@ namespace CollectionManagerMaui.ViewModels
 
         partial void OnCollectionChanged(CollectionModel value)
         {
+            if (value == null)
+                return;
+
             foreach (var item in value.Items)
                 Subscribe(item);
 

@@ -68,30 +68,25 @@ namespace CollectionManagerMaui.Services
                     var itemRaw = line.Substring(1).Trim();
                     var parts = itemRaw.Split('|');
 
-                    string itemName = "";
-                    itemName = parts[0].Trim();
+                    string itemName = parts[0].Trim();
 
                     int itemPrice = 0;
                     var p = parts[1].Trim();
                     if (int.TryParse(p, out var pInt))
                         itemPrice = pInt;
 
-                    string itemState = "";
-                    itemState = parts[2].Trim();
+                    string itemState = parts[2].Trim();
 
                     int itemRating = 0;
                     var r = parts[3].Trim();
                     if (int.TryParse(r, out var rInt))
                         itemRating = rInt;
 
-                    string itemComment = "";
-                    itemComment = parts[4].Trim();
+                    string itemComment = parts[4].Trim();
 
-                    string itemRarity = "";
-                    itemRarity = parts[5].Trim();
+                    string itemRarity = parts[5].Trim();
 
-                    string itemCategory = "";
-                    itemCategory = parts[6].Trim();
+                    string itemCategory = parts[6].Trim();
 
                     var item = new ItemModel { Name = itemName, Price = itemPrice, State = itemState, Rating = itemRating, Comment = itemComment, Rarity = itemRarity, Category = itemCategory };
                     current.Items.Add(item);

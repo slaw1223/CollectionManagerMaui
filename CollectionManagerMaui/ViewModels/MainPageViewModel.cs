@@ -27,7 +27,9 @@ namespace CollectionManagerMaui.ViewModels
         [RelayCommand]
         async Task AddCollection()
         {
-            if(NewCollection.Name.Equals("ClearAll", StringComparison.OrdinalIgnoreCase))
+            var name = NewCollection.Name ?? string.Empty;
+
+            if (string.Equals(name, "ClearAll", StringComparison.OrdinalIgnoreCase))
             {
                 bool result = await App.Current.MainPage.DisplayAlert("Warning", "Czy na pewno chcesz usunąć wszystkie kolekcje?", "Tak", "Nie");
                 if (result)
@@ -38,15 +40,17 @@ namespace CollectionManagerMaui.ViewModels
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(NewCollection.Name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Nazwa kolekcji nie może być pusta", "OK");
                 return;
             }
 
-            if(!Collections.Any(c => c.Name.Equals(NewCollection.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
+            var trimmed = name.Trim();
+
+            if(!Collections.Any(c => c.Name.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
             {
-                Collections.Add(new CollectionModel { Name = NewCollection.Name.Trim() });
+                Collections.Add(new CollectionModel { Name = trimmed });
                 NewCollection.Name = string.Empty;
                 await FileService.SaveAsync();
             }
@@ -57,7 +61,7 @@ namespace CollectionManagerMaui.ViewModels
                 if (result)
                 {
                     int counter = 1;
-                    string baseName = NewCollection.Name.Trim();
+                    string baseName = trimmed;
                     string newName;
 
                     do

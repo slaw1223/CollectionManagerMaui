@@ -15,7 +15,7 @@
         </Frame>
 
         <ScrollView>
-            <Frame>
+            <Frame Style="{StaticResource CollectionsContainer}">
                 <CollectionView ItemsSource="{Binding Collections}">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
@@ -23,11 +23,13 @@
                     
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <HorizontalStackLayout>
-                                <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                                <Button Text="Edytuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToEditCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
-                                <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
-                            </HorizontalStackLayout>
+                            <Frame Style="{StaticResource CollectionContainer}">
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                    <Button Text="Edytuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToEditCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                    <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                </HorizontalStackLayout>
+                            </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

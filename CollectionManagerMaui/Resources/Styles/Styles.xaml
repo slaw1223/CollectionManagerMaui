@@ -26,8 +26,8 @@
     </Style>
 
     <Style TargetType="Button">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource PrimaryDarkText}}" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TitleContainer}"/>
+        <Setter Property="TextColor" Value="{StaticResource Title}"/>
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="BorderWidth" Value="0"/>
@@ -113,8 +113,8 @@
     </Style>
 
     <Style TargetType="Entry">
-        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
-        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Title}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TitleContainer}" />
         <Setter Property="FontFamily" Value="OpenSansRegular"/>
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" />
@@ -432,6 +432,16 @@
         <Setter Property="BackgroundColor" Value="{StaticResource InputContainer}"/>
     </Style>
 
+    <Style TargetType="Frame" x:Key="CollectionsContainer" BasedOn="{StaticResource NoBorder}">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource CollectionsContainer}"/>
+       
+    </Style>
+
+    <Style TargetType="Frame" x:Key="CollectionContainer" BasedOn="{StaticResource CollectionsContainer}">
+        <Setter Property="BackgroundColor" Value="{StaticResource CollectionContainer}"/>
+    </Style>
+
     <Style TargetType="Label" x:Key="LabelMargin">
         <Setter Property="Margin" Value="10"/>
     </Style>
@@ -443,6 +453,7 @@
     <Style TargetType="Button" x:Key="ButtonMargin">
         <Setter Property="Margin" Value="10"/>
     </Style>
+
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource TitleContainer}}" />

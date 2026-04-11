@@ -31,6 +31,8 @@
     <Color x:Key="TitleContainer">#442220</Color>
     <Color x:Key="Title">#B5DEAD</Color>
     <Color x:Key="InputContainer">#594B2E</Color>
+    <Color x:Key="CollectionsContainer">#4F3727</Color>
+    <Color x:Key="CollectionContainer">#594B2E</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
