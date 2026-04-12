@@ -29,17 +29,6 @@ namespace CollectionManagerMaui.ViewModels
         {
             var name = NewCollection.Name ?? string.Empty;
 
-            if (string.Equals(name, "ClearAll", StringComparison.OrdinalIgnoreCase))
-            {
-                bool result = await App.Current.MainPage.DisplayAlert("Warning", "Czy na pewno chcesz usunąć wszystkie kolekcje?", "Tak", "Nie");
-                if (result)
-                {
-                    NewCollection.Name = string.Empty;
-                    await FileService.ClearAllAsync();
-                }
-                return;
-            }
-
             if (string.IsNullOrWhiteSpace(name))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Nazwa kolekcji nie może być pusta", "OK");
@@ -48,10 +37,13 @@ namespace CollectionManagerMaui.ViewModels
 
             var trimmed = name.Trim();
 
-            if(!Collections.Any(c => c.Name.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
+            if (!Collections.Any(c => c.Name.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
             {
-                Collections.Add(new CollectionModel { Name = trimmed });
-                NewCollection.Name = string.Empty;
+                App.Current.Dispatcher.Dispatch(() =>
+                {
+                    Collections.Add(NewCollection);
+                });
+                NewCollection = new CollectionModel();
                 await FileService.SaveAsync();
             }
             else
@@ -71,8 +63,11 @@ namespace CollectionManagerMaui.ViewModels
                     }
                     while (Collections.Any(c => c.Name.Equals(newName, StringComparison.OrdinalIgnoreCase)));
 
-                    Collections.Add(new CollectionModel { Name = newName });
-                    NewCollection.Name = string.Empty;
+                    App.Current.Dispatcher.Dispatch(() =>
+                    {
+                        Collections.Add(NewCollection);
+                    });
+                    NewCollection = new CollectionModel();
                     await FileService.SaveAsync();
                 }
             }
@@ -94,7 +89,11 @@ namespace CollectionManagerMaui.ViewModels
             bool result = await App.Current.MainPage.DisplayAlert("Warning", $"Czy na pewno chcesz usunąć kolekcję '{collection.Name}'?", "Tak", "Nie");
             if (result)
             {
-                Collections.Remove(collection);
+                App.Current.Dispatcher.Dispatch(() =>
+                {
+                    Collections.Remove(collection);
+                });
+
                 await FileService.SaveAsync();
             }
         }

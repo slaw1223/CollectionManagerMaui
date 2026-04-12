@@ -68,6 +68,9 @@ namespace CollectionManagerMaui.Services
                     var itemRaw = line.Substring(1).Trim();
                     var parts = itemRaw.Split('|');
 
+                    if (parts.Length < 7)
+                        continue;
+
                     string itemName = parts[0].Trim();
 
                     int itemPrice = 0;
@@ -92,12 +95,6 @@ namespace CollectionManagerMaui.Services
                     current.Items.Add(item);
                 }
             }
-        }
-
-        public static async Task ClearAllAsync()
-        {
-            Collections.Clear();
-            await SaveAsync();
         }
     }
 }
