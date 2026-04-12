@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,10 +40,7 @@ namespace CollectionManagerMaui.ViewModels
 
             if (!Collections.Any(c => c.Name.Equals(trimmed, StringComparison.OrdinalIgnoreCase)))
             {
-                App.Current.Dispatcher.Dispatch(() =>
-                {
-                    Collections.Add(NewCollection);
-                });
+                Collections.Add(new CollectionModel { Name = trimmed });
                 NewCollection = new CollectionModel();
                 await FileService.SaveAsync();
             }
@@ -63,10 +61,7 @@ namespace CollectionManagerMaui.ViewModels
                     }
                     while (Collections.Any(c => c.Name.Equals(newName, StringComparison.OrdinalIgnoreCase)));
 
-                    App.Current.Dispatcher.Dispatch(() =>
-                    {
-                        Collections.Add(NewCollection);
-                    });
+                    Collections.Add(new CollectionModel { Name = newName });
                     NewCollection = new CollectionModel();
                     await FileService.SaveAsync();
                 }
@@ -86,13 +81,19 @@ namespace CollectionManagerMaui.ViewModels
         [RelayCommand]
         async Task RemoveCollection(CollectionModel collection)
         {
-            bool result = await App.Current.MainPage.DisplayAlert("Warning", $"Czy na pewno chcesz usunąć kolekcję '{collection.Name}'?", "Tak", "Nie");
+            if(collection == null)
+                return;
+            var name = collection.Name ?? "???";
+
+            bool result = await App.Current.MainPage.DisplayAlert("Warning", $"Czy na pewno chcesz usunąć kolekcję '{name}'?", "Tak", "Nie");
             if (result)
             {
-                App.Current.Dispatcher.Dispatch(() =>
-                {
-                    Collections.Remove(collection);
-                });
+                var toRemove = collection;
+
+                await Task.Delay(50);
+
+                Debug.WriteLine($"Removing: {toRemove.Name}");
+                Collections.Remove(toRemove);
 
                 await FileService.SaveAsync();
             }

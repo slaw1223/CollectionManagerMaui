@@ -15,85 +15,109 @@ namespace CollectionManagerMaui.Services
         const string FileName = "collections.txt";
         static string FilePath => Path.Combine(FileSystem.AppDataDirectory, FileName);
 
-        public static ObservableCollection<CollectionModel> Collections { get; } = new ObservableCollection<CollectionModel>();
+        public static ObservableCollection<CollectionModel> Collections { get; } = new();
 
         public FileService()
         {}
 
         public static async Task SaveAsync()
         {
-            var sb = new System.Text.StringBuilder();
-            foreach (var coll in Collections)
+            try
             {
-                sb.AppendLine($"Collection: {coll.Name}");
-                foreach (var i in coll.Items)
-                    sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}");
-                sb.AppendLine();
-            }
+                var sb = new System.Text.StringBuilder();
+                foreach (var coll in Collections)
+                {
+                    sb.AppendLine($"Collection: {coll.Name}");
 
-            var dir = Path.GetDirectoryName(FilePath) ?? FileSystem.AppDataDirectory;
-            Directory.CreateDirectory(dir);
-            await File.WriteAllTextAsync(FilePath, sb.ToString());
+                    if (coll.Items == null)
+                        continue;
+
+                    foreach (var i in coll.Items)
+                    sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}");
+                    sb.AppendLine();
+                }
+
+                var dir = Path.GetDirectoryName(FilePath) ?? FileSystem.AppDataDirectory;
+                Directory.CreateDirectory(dir);
+
+                await File.WriteAllTextAsync(FilePath, sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saving file: {ex.Message}");
+            }
         }
 
         public static async Task LoadAsync()
         {
-            Collections.Clear();
+            try
+            {
+                Collections.Clear();
 
             if (!File.Exists(FilePath))
                 return;
 
-            Console.WriteLine($"File path: {FilePath}");
+            Debug.WriteLine($"File path: {FilePath}");
 
-            var lines = await File.ReadAllLinesAsync(FilePath);
-            CollectionModel? current = null;
 
-            foreach (var raw in lines)
-            {
-                var line = raw?.Trim();
-                if (string.IsNullOrEmpty(line))
+                var lines = await File.ReadAllLinesAsync(FilePath);
+
+                CollectionModel? current = null;
+
+                
+
+                foreach (var raw in lines)
                 {
-                    current = null;
-                    continue;
-                }
-
-                if (line.StartsWith("Collection:"))
-                {
-                    var collectionName = line.Substring("Collection:".Length).Trim();
-                    current = new CollectionModel { Name = collectionName };
-                    Collections.Add(current);
-                }
-                else if (line.StartsWith("-") && current != null)
-                {
-                    var itemRaw = line.Substring(1).Trim();
-                    var parts = itemRaw.Split('|');
-
-                    if (parts.Length < 7)
+                    var line = raw?.Trim();
+                    if (string.IsNullOrEmpty(line))
+                    {
+                        current = null;
                         continue;
+                    }
 
-                    string itemName = parts[0].Trim();
+                    if (line.StartsWith("Collection:"))
+                    {
+                        var collectionName = line.Substring("Collection:".Length).Trim();
+                        current = new CollectionModel { Name = collectionName, Items = new ObservableCollection<ItemModel>() };
+                        Collections.Add(current);
+                    }
+                    else if (line.StartsWith("-") && current != null)
+                    {
+                        var itemRaw = line.Substring(1).Trim();
+                        var parts = itemRaw.Split('|');
 
-                    int itemPrice = 0;
-                    var p = parts[1].Trim();
-                    if (int.TryParse(p, out var pInt))
-                        itemPrice = pInt;
+                        if (parts.Length < 7)
+                            continue;
 
-                    string itemState = parts[2].Trim();
+                        string itemName = parts[0].Trim();
 
-                    int itemRating = 0;
-                    var r = parts[3].Trim();
-                    if (int.TryParse(r, out var rInt))
-                        itemRating = rInt;
+                        int itemPrice = 0;
+                        var p = parts[1].Trim();
+                        if (int.TryParse(p, out var pInt))
+                            itemPrice = pInt;
 
-                    string itemComment = parts[4].Trim();
+                        string itemState = parts[2].Trim();
 
-                    string itemRarity = parts[5].Trim();
+                        int itemRating = 0;
+                        var r = parts[3].Trim();
+                        if (int.TryParse(r, out var rInt))
+                            itemRating = rInt;
 
-                    string itemCategory = parts[6].Trim();
+                        string itemComment = parts[4].Trim();
 
-                    var item = new ItemModel { Name = itemName, Price = itemPrice, State = itemState, Rating = itemRating, Comment = itemComment, Rarity = itemRarity, Category = itemCategory };
-                    current.Items.Add(item);
+                        string itemRarity = parts[5].Trim();
+
+                        string itemCategory = parts[6].Trim();
+
+                        var item = new ItemModel { Name = itemName, Price = itemPrice, State = itemState, Rating = itemRating, Comment = itemComment, Rarity = itemRarity, Category = itemCategory };
+                        current.Items.Add(item);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading file: {ex.Message}");
+                return;
             }
         }
     }

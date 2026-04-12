@@ -13,6 +13,6 @@ namespace CollectionManagerMaui.Models
         [ObservableProperty]
         private string name;
 
-        public ObservableCollection<ItemModel> Items { get; set; } = new ObservableCollection<ItemModel>();
+        public ObservableCollection<ItemModel> Items { get; set; } = new();
     }
 }
