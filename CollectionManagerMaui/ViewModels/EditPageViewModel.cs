@@ -21,6 +21,9 @@ namespace CollectionManagerMaui.ViewModels
         [ObservableProperty]
         ItemModel newItem = new ItemModel();
 
+        public EditPageViewModel()
+        {}
+
         [RelayCommand]
         async Task AddItem()
         {
@@ -33,7 +36,7 @@ namespace CollectionManagerMaui.ViewModels
             {
                 Collection.Items.Add(new ItemModel { Name = NewItem.Name.Trim() });
                 NewItem.Name = string.Empty;
-                await FileService.SaveAsync();
+                await Save();
             }
             else
             {
@@ -48,7 +51,7 @@ namespace CollectionManagerMaui.ViewModels
                     }
                     Collection.Items.Add(new ItemModel { Name = $"{baseName} ({counter})" });
                     NewItem.Name = string.Empty;
-                    await FileService.SaveAsync();
+                    await Save();
                 }
             }
         }
@@ -66,7 +69,7 @@ namespace CollectionManagerMaui.ViewModels
             if (result)
             {
                 Collection.Items.Remove(item);
-                await FileService.SaveAsync();
+                await Save();
             }
         }
 
@@ -74,6 +77,19 @@ namespace CollectionManagerMaui.ViewModels
         {
             if (value == null)
                 return;
+
+            if (value.Items.Count == 0)
+            {
+                var defaultItem = new ItemModel
+                {
+                    Name = "Przedmiot 1"
+                };
+
+                value.Items.Add(defaultItem);
+                Subscribe(defaultItem);
+
+                _ = Save();
+            }
 
             foreach (var item in value.Items)
                 Subscribe(item);
