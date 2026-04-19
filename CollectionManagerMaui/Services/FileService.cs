@@ -7,18 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CollectionManagerMaui.Models;
+using CommunityToolkit.Maui.Storage;
 
 namespace CollectionManagerMaui.Services
 {
     public class FileService
     {
+        private readonly IFolderPicker folderPicker;
+
         const string FileName = "collections.txt";
         static string FilePath => Path.Combine(FileSystem.AppDataDirectory, FileName);
 
         public static ObservableCollection<CollectionModel> Collections { get; } = new();
 
-        public FileService()
-        {}
+        public FileService(IFolderPicker folderPicker)
+        {
+            this.folderPicker = folderPicker;
+        }
 
         public static async Task SaveAsync()
         {
@@ -33,7 +38,7 @@ namespace CollectionManagerMaui.Services
                         continue;
 
                     foreach (var i in coll.Items)
-                    sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}");
+                    sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}|{i.ImagePath}");
                     sb.AppendLine();
                 }
 
@@ -48,23 +53,25 @@ namespace CollectionManagerMaui.Services
             }
         }
 
-        public static async Task LoadAsync()
+        public static async Task LoadAsync(bool isImport, string path)
         {
             try
             {
-                Collections.Clear();
+                if (!isImport)
+                    Collections.Clear();
 
-            if (!File.Exists(FilePath))
+                if (!File.Exists(FilePath))
                 return;
 
-            Debug.WriteLine($"File path: {FilePath}");
+                Debug.WriteLine($"File path: {FilePath}");
 
 
                 var lines = await File.ReadAllLinesAsync(FilePath);
 
-                CollectionModel? current = null;
+                if(isImport)
+                    lines = await File.ReadAllLinesAsync(path);
 
-                
+                CollectionModel current = null;
 
                 foreach (var raw in lines)
                 {
@@ -78,7 +85,39 @@ namespace CollectionManagerMaui.Services
                     if (line.StartsWith("Collection:"))
                     {
                         var collectionName = line.Substring("Collection:".Length).Trim();
-                        current = new CollectionModel { Name = collectionName, Items = new ObservableCollection<ItemModel>() };
+
+                        if (isImport && Collections.Any(c => c.Name.Equals(collectionName, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            bool result = await App.Current.MainPage.DisplayAlert("Warning",$"Kolekcja o nazwie '{collectionName}' już istnieje.", "Dodaj i tak", "Anuluj");
+
+                            if (result)
+                            {
+                                int counter = 1;
+                                string baseName = collectionName;
+                                string newName;
+
+                                do
+                                {
+                                    newName = $"{baseName}({counter})";
+                                    counter++;
+                                }
+                                while (Collections.Any(c => c.Name.Equals(newName, StringComparison.OrdinalIgnoreCase)));
+
+                                collectionName = newName;
+                            }
+                            else
+                            {
+                                current = null;
+                                continue;
+                            }
+                        }
+
+                        current = new CollectionModel
+                        {
+                            Name = collectionName,
+                            Items = new ObservableCollection<ItemModel>()
+                        };
+
                         Collections.Add(current);
                     }
                     else if (line.StartsWith("-") && current != null)
@@ -91,10 +130,7 @@ namespace CollectionManagerMaui.Services
 
                         string itemName = parts[0].Trim();
 
-                        int itemPrice = 0;
-                        var p = parts[1].Trim();
-                        if (int.TryParse(p, out var pInt))
-                            itemPrice = pInt;
+                        string itemPrice = parts[1].Trim();
 
                         string itemState = parts[2].Trim();
 
@@ -109,7 +145,9 @@ namespace CollectionManagerMaui.Services
 
                         string itemCategory = parts[6].Trim();
 
-                        var item = new ItemModel { Name = itemName, Price = itemPrice, State = itemState, Rating = itemRating, Comment = itemComment, Rarity = itemRarity, Category = itemCategory };
+                        string itemImagePath = parts[7].Trim();
+
+                        var item = new ItemModel { Name = itemName, Price = itemPrice, State = itemState, Rating = itemRating, Comment = itemComment, Rarity = itemRarity, Category = itemCategory, ImagePath = itemImagePath };
                         current.Items.Add(item);
                     }
                 }
@@ -118,6 +156,56 @@ namespace CollectionManagerMaui.Services
             {
                 Debug.WriteLine($"Error loading file: {ex.Message}");
                 return;
+            }
+        }
+
+        public static async Task ExportAsync(CollectionModel collection)
+        {
+            try
+            {
+                var result = await FolderPicker.Default.PickAsync(CancellationToken.None);
+                if (result.IsSuccessful)
+                {
+                    string folderPath = result.Folder.Path;
+                    string exportPath = Path.Combine(folderPath, $"{collection.Name}.txt");
+
+
+                    var sb = new System.Text.StringBuilder();
+                    sb.AppendLine($"Collection: {collection.Name}");
+
+                    if (collection.Items == null)
+                        return;
+
+                    foreach (var i in collection.Items)
+                        sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}|{i.ImagePath}");
+                    sb.AppendLine();
+
+                    await File.WriteAllTextAsync(exportPath, sb.ToString());
+
+                    await App.Current.MainPage.DisplayAlert("Info", $"Wyekportowano plik do: {exportPath}","Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error exporting file: {ex.Message}");
+            }
+        }
+
+        public static async Task ImportAsync()
+        {
+            try
+            {
+                var result = await FilePicker.Default.PickAsync();
+
+                if (result == null)
+                    return;
+
+                await LoadAsync(true, result.FullPath);
+                await SaveAsync();                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error importing file: {ex.Message}");
             }
         }
     }

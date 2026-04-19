@@ -121,5 +121,20 @@ namespace CollectionManagerMaui.ViewModels
                 Collection.Items.Add(item);
             }
         }
+
+        [RelayCommand]
+        async Task AddImage(ItemModel item)
+        {
+            var result = await FilePicker.Default.PickAsync(new PickOptions
+            {
+                FileTypes = FilePickerFileType.Images,
+                PickerTitle = "Wybierz obraz"
+            });
+            if (result != null)
+            {
+                item.ImagePath = result.FullPath;
+                await Save();
+            }
+        }
     }
 }

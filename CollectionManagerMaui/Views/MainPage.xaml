@@ -17,23 +17,30 @@
 
             <ScrollView>
                 <Frame Style="{StaticResource CollectionsContainer}">
-                    <CollectionView ItemsSource="{Binding Collections}">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
-                        </CollectionView.ItemsLayout>
+                    <VerticalStackLayout>
+                        
+                        <Button Text="Importuj" Command="{Binding ImportCollectionCommand}" Margin="5"/>
+                        
+                        <CollectionView ItemsSource="{Binding Collections}">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
+                            </CollectionView.ItemsLayout>
 
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Style="{StaticResource CollectionContainer}">
-                                    <HorizontalStackLayout>
-                                        <Label Text="{Binding Name}" VerticalOptions="Center"/>
-                                        <Button Text="Edytuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToEditCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
-                                        <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
-                                    </HorizontalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame Style="{StaticResource CollectionContainer}">
+                                        <HorizontalStackLayout>
+                                            <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                            <Button Text="Edytuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToEditCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                            <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+
+                                            <Button Text="Exportuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
                 </Frame>
             </ScrollView>
         </VerticalStackLayout>

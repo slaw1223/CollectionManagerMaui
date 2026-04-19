@@ -10,11 +10,12 @@ namespace CollectionManagerMaui.Models
     public partial class ItemModel : ObservableObject
     {
         [ObservableProperty] private string name;
-        [ObservableProperty] private int price;
+        [ObservableProperty] private string price;
         [ObservableProperty] private string state;
         [ObservableProperty] private int rating;
         [ObservableProperty] private string comment;
         [ObservableProperty] private string rarity;
         [ObservableProperty] private string category;
+        [ObservableProperty] private string imagePath;
     }
 }

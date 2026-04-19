@@ -22,7 +22,7 @@ namespace CollectionManagerMaui.ViewModels
 
         public MainPageViewModel()
         {
-            _ = FileService.LoadAsync();
+            _ = FileService.LoadAsync(false, "");
         }
 
         [RelayCommand]
@@ -46,7 +46,7 @@ namespace CollectionManagerMaui.ViewModels
             }
             else
             {
-                bool result = await App.Current.MainPage.DisplayAlert("Warning", "Taka kolekcja już istnieje", "Dodaj i tak", "Anuluj");
+                bool result = await App.Current.MainPage.DisplayAlert("Warning", $"Kolekcja o nazwie '{trimmed}' już istnieje", "Dodaj i tak", "Anuluj");
 
                 if (result)
                 {
@@ -97,6 +97,20 @@ namespace CollectionManagerMaui.ViewModels
 
                 await FileService.SaveAsync();
             }
+        }
+
+        [RelayCommand]
+        async Task ExportCollection(CollectionModel collection)
+        {
+            if (collection == null)
+                return;
+            await FileService.ExportAsync(collection);
+        }
+
+        [RelayCommand]
+        async Task ImportCollection()
+        {
+            await FileService.ImportAsync();
         }
     }
 }

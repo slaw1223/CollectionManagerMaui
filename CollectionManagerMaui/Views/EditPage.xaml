@@ -17,21 +17,7 @@
                     </VerticalStackLayout>
                 </Frame>
 
-                <Frame Style="{StaticResource InputContainer}">
-                    <VerticalStackLayout HorizontalOptions="Center">
-                        <Label Text="Dodaj nową kolumnę: " Style="{StaticResource InputTitle}"/>
-                        <Entry Text="{Binding NewColumnName}" Placeholder="Nazwa kolumny" Margin="10"/>
-                        <Picker SelectedItem="{Binding NewColumn}" Margin="10">
-                            <Picker.Items>
-                                <x:String>Wartość tekstowa</x:String>
-                                <x:String>Wartość liczbowa</x:String>
-                                <x:String>Select</x:String>
-                            </Picker.Items>
-                        </Picker>
-                        <Button Text="Dodaj kolumnę" Command="{Binding AddColumnCommand}" Margin="10"/>
-
-                    </VerticalStackLayout>
-                </Frame>
+               
             </HorizontalStackLayout>
 
 
@@ -55,6 +41,8 @@
                                         <HorizontalStackLayout Margin="15" Padding="5">
                                             <Entry Text="{Binding Name}" Placeholder="Nazwa" FontSize="20" HorizontalOptions="Center"/>
                                             <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveItemCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0" HorizontalOptions="End"/>
+                                            <Button Text="Dodaj Obrazek" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddImageCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0" HorizontalOptions="End"/>
+                                            <Image Source="{Binding ImagePath}" WidthRequest="100" HeightRequest="100" Margin="10,0,0,0" HorizontalOptions="End"/>
                                         </HorizontalStackLayout>
                                         <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto, Auto, Auto, Auto" ColumnSpacing="5" RowSpacing="10">
                                             <Label Text="Cena: " Style="{StaticResource Input}"/>

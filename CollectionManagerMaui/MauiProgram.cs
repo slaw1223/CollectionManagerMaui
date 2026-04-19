@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CollectionManagerMaui.Views;
+using Microsoft.Extensions.Logging;
+using Microsoft.Maui;
+using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Storage;
 
 namespace CollectionManagerMaui
 {
@@ -9,14 +13,19 @@ namespace CollectionManagerMaui
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<IFolderPicker>(FolderPicker.Default);
+
+            builder.Services.AddTransient<MainPage>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
