@@ -69,7 +69,6 @@ namespace CollectionManagerMaui.ViewModels
             if (result)
             {
                 Collection.Items.Remove(item);
-                await Save();
             }
         }
 
