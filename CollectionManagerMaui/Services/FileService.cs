@@ -38,7 +38,7 @@ namespace CollectionManagerMaui.Services
                         continue;
 
                     foreach (var i in coll.Items)
-                    sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}|{i.ImagePath}");
+                    sb.AppendLine($"- {i.Name}|=|{i.Price}|=|{i.State}|=|{i.Rating}|=|{i.Comment}|=|{i.Rarity}|=|{i.Category}|=|{i.ImagePath}");
                     sb.AppendLine();
                 }
 
@@ -123,7 +123,7 @@ namespace CollectionManagerMaui.Services
                     else if (line.StartsWith("-") && current != null)
                     {
                         var itemRaw = line.Substring(1).Trim();
-                        var parts = itemRaw.Split('|');
+                        var parts = itemRaw.Split("|=|");
 
                         if (parts.Length < 7)
                             continue;
@@ -177,7 +177,7 @@ namespace CollectionManagerMaui.Services
                         return;
 
                     foreach (var i in collection.Items)
-                        sb.AppendLine($"- {i.Name}|{i.Price}|{i.State}|{i.Rating}|{i.Comment}|{i.Rarity}|{i.Category}|{i.ImagePath}");
+                        sb.AppendLine($"- {i.Name}|=|{i.Price}|=|{i.State}|=|{i.Rating}|=|{i.Comment}|=|{i.Rarity}|=|{i.Category}|=|{i.ImagePath}");
                     sb.AppendLine();
 
                     await File.WriteAllTextAsync(exportPath, sb.ToString());
