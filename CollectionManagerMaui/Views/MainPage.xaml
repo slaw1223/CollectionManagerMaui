@@ -31,7 +31,11 @@
                                     <Frame Style="{StaticResource CollectionContainer}">
                                         <HorizontalStackLayout>
                                             <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                            
                                             <Button Text="Pokaż" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                            
+                                            <Button Text="Podsumowanie" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RedirectToCollectionSummaryCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
+                                            
                                             <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>
 
                                             <Button Text="Exportuj" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExportCollectionCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0"/>

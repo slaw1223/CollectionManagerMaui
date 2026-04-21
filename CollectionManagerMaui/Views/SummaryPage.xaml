@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CollectionManagerMaui.Views.SummaryPage"
+             >
+    <ScrollView>
+        <VerticalStackLayout>
+            <Frame Style="{StaticResource TitleContainer}">
+                <Label Text="{Binding Collection.Name, StringFormat='Podsumowanie kolekcji: {0}'}" Style="{StaticResource Title}"/>
+            </Frame>
+
+            <Frame Style="{StaticResource CollectionsContainer}">
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="{Binding OwnedItemsCount, StringFormat='Posiadane przedmioty: {0}'}" Style="{StaticResource Input}" />
+                    <Label Text="{Binding SoldItemsCount, StringFormat='Sprzedane przedmioty: {0}'}" Style="{StaticResource Input}" />
+                    <Label Text="{Binding ForSaleItemsCount, StringFormat='Przedmioty na sprzedaż: {0}'}" Style="{StaticResource Input}" />
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

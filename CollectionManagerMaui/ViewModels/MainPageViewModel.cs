@@ -80,6 +80,17 @@ namespace CollectionManagerMaui.ViewModels
         }
 
         [RelayCommand]
+        async Task RedirectToCollectionSummary(CollectionModel collection)
+        {
+            if (collection == null)
+                return;
+            await Shell.Current.GoToAsync(nameof(SummaryPage), new Dictionary<string, object>
+            {
+                ["Collection"] = collection
+            });
+        }
+
+        [RelayCommand]
         async Task RemoveCollection(CollectionModel collection)
         {
             if(collection == null)
