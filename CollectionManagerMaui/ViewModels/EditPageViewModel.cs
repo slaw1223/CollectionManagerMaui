@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace CollectionManagerMaui.ViewModels
 {
     [QueryProperty(nameof(Item), "Item")]
+    [QueryProperty(nameof(Collection), "Collection")]
     public partial class EditPageViewModel : ObservableObject
     {
         [ObservableProperty]
@@ -26,57 +27,20 @@ namespace CollectionManagerMaui.ViewModels
         [RelayCommand]
         async Task Save()
         {
-            await FileService.SaveAsync();
-        }
-
-
-        partial void OnCollectionChanged(CollectionModel value)
-        {
-            if (value == null)
-                return;
-
-            if (value.Items.Count == 0)
+            if (Collection?.Items != null)
             {
-                var defaultItem = new ItemModel
+                var sortedItems = Collection.Items.OrderBy(item => item.State == "Sprzedane" ? 1 : 0).ToList();
+
+                Collection.Items.Clear();
+
+                foreach (var item in sortedItems)
                 {
-                    Name = "Przedmiot 1"
-                };
-
-                value.Items.Add(defaultItem);
-                Subscribe(defaultItem);
-
-                _ = Save();
-            }
-
-            foreach (var item in value.Items)
-                Subscribe(item);
-
-            value.Items.CollectionChanged += (s, e) =>
-            {
-                if (e.NewItems != null)
-                    foreach (ItemModel item in e.NewItems)
-                        Subscribe(item);
-            };
-        }
-        void Subscribe(ItemModel item)
-        {
-            item.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(ItemModel.State))
-                {
-                    if (item.State == "Sprzedane")
-                    {
-                        MoveToEnd(item);
-                    }
+                    Collection.Items.Add(item);
                 }
-            };
-        }
-        void MoveToEnd(ItemModel item)
-        {
-            if (Collection.Items.Remove(item))
-            {
-                Collection.Items.Add(item);
             }
+
+            await FileService.SaveAsync();
+            await Shell.Current.GoToAsync("..");
         }
 
         [RelayCommand]
@@ -90,7 +54,6 @@ namespace CollectionManagerMaui.ViewModels
             if (result != null)
             {
                 item.ImagePath = result.FullPath;
-                await Save();
             }
         }
     }

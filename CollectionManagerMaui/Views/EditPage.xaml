@@ -21,7 +21,7 @@
                             
                             <HorizontalStackLayout Margin="15" Padding="5">
                                 <Entry Text="{Binding Item.Name}" Placeholder="Nazwa" FontSize="20" HorizontalOptions="Center"/>
-                                <Button Text="Dodaj Obrazek" Command="{Binding AddItemCommand}" Margin="10,0,0,0" HorizontalOptions="End"/>
+                                <Button Text="Dodaj Obrazek" Command="{Binding AddImageCommand}" CommandParameter="{Binding Item}" Margin="10,0,0,0" HorizontalOptions="End"/>
                                 <Image Source="{Binding Item.ImagePath}" WidthRequest="100" HeightRequest="100" Margin="10,0,0,0" HorizontalOptions="End"/>
                             </HorizontalStackLayout>
                             

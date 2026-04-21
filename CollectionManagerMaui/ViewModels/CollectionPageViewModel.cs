@@ -23,6 +23,25 @@ namespace CollectionManagerMaui.ViewModels
         [ObservableProperty]
         private ItemModel item;
 
+
+        [RelayCommand]
+        async Task Save()
+        {
+            if (Collection.Items != null)
+            {
+                var sortedItems = Collection.Items.OrderBy(item => item.State == "Sprzedane" ? 1 : 0).ToList();
+
+                Collection.Items.Clear();
+
+                foreach (var item in sortedItems)
+                {
+                    Collection.Items.Add(item);
+                }
+            }
+
+            await FileService.SaveAsync();
+        }
+
         [RelayCommand]
         async Task EditItem(ItemModel item)
         {
@@ -31,7 +50,8 @@ namespace CollectionManagerMaui.ViewModels
 
             await Shell.Current.GoToAsync(nameof(EditPage), new Dictionary<string, object>
             {
-                ["Item"] = item
+                ["Item"] = item,
+                ["Collection"] = Collection
             });
         }
 
@@ -42,6 +62,7 @@ namespace CollectionManagerMaui.ViewModels
             if (result)
             {
                 Collection.Items.Remove(item);
+                await Save();
             }
         }
 
@@ -55,9 +76,9 @@ namespace CollectionManagerMaui.ViewModels
             }
             if (!Collection.Items.Any(i => i.Name.Equals(NewItem.Name.Trim(), StringComparison.OrdinalIgnoreCase)))
             {
-                Collection.Items.Add(new ItemModel { Name = NewItem.Name.Trim() });
+                Collection.Items.Add(new ItemModel { Name = NewItem.Name.Trim(), Rating = 1 });
                 NewItem.Name = string.Empty;
-                await FileService.SaveAsync();
+                await Save();
             }
             else
             {
@@ -70,9 +91,9 @@ namespace CollectionManagerMaui.ViewModels
                     {
                         counter++;
                     }
-                    Collection.Items.Add(new ItemModel { Name = $"{baseName} ({counter})" });
+                    Collection.Items.Add(new ItemModel { Name = $"{baseName} ({counter})", Rating = 1 });
                     NewItem.Name = string.Empty;
-                    await FileService.SaveAsync();
+                    await Save();
                 }
             }
         }
