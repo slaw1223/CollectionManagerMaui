@@ -68,16 +68,17 @@ namespace CollectionManagerMaui.ViewModels
             }
         }
         [RelayCommand]
-        async Task RedirectToEdit(CollectionModel collection)
+        async Task RedirectToCollection(CollectionModel collection)
         {
             if (collection == null)
                 return;
 
-            await Shell.Current.GoToAsync(nameof(EditPage), new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(CollectionPage), new Dictionary<string, object>
             {
                 ["Collection"] = collection
             });
         }
+
         [RelayCommand]
         async Task RemoveCollection(CollectionModel collection)
         {

@@ -7,6 +7,7 @@ namespace CollectionManagerMaui
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(CollectionPage), typeof(CollectionPage));
             Routing.RegisterRoute(nameof(EditPage), typeof(EditPage));
         }
     }

@@ -5,94 +5,72 @@
     <ScrollView>
         <VerticalStackLayout>
             <Frame Style="{StaticResource TitleContainer}">
-                <Label Text="{Binding Collection.Name}" Style="{StaticResource Title}"/>
+                <Label Text="{Binding Item.Name}" Style="{StaticResource Title}"/>
             </Frame>
-
-            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                <Frame Style="{StaticResource InputContainer}">
-                    <VerticalStackLayout HorizontalOptions="Center">
-                        <Label Text="Dodaj nowy przedmiot:" Style="{StaticResource InputTitle}"/>
-                        <Entry Text="{Binding NewItem.Name}" Placeholder="Nazwa przedmiotu" Margin="10"/>
-                        <Button Text="Dodaj przedmiot" Command="{Binding AddItemCommand}" Margin="10"/>
-                    </VerticalStackLayout>
-                </Frame>
-
-               
-            </HorizontalStackLayout>
-
 
             <Frame Style="{StaticResource CollectionsContainer}">
                 <VerticalStackLayout>
                     <Button Text="Zapisz" Command="{Binding SaveCommand}" Margin="5"/>
-                    <CollectionView ItemsSource="{Binding Collection.Items}">
-                        <CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
-                        </CollectionView.ItemsLayout>
+                    <Frame Style="{StaticResource CollectionContainer}">
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding Item.State}" Value="Sprzedane">
+                                <Setter Property="Opacity" Value="0.4"/>
+                            </DataTrigger>
+                        </Frame.Triggers>
+                        <VerticalStackLayout>
+                            
+                            <HorizontalStackLayout Margin="15" Padding="5">
+                                <Entry Text="{Binding Item.Name}" Placeholder="Nazwa" FontSize="20" HorizontalOptions="Center"/>
+                                <Button Text="Dodaj Obrazek" Command="{Binding AddItemCommand}" Margin="10,0,0,0" HorizontalOptions="End"/>
+                                <Image Source="{Binding Item.ImagePath}" WidthRequest="100" HeightRequest="100" Margin="10,0,0,0" HorizontalOptions="End"/>
+                            </HorizontalStackLayout>
+                            
+                            <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto, Auto, Auto, Auto" ColumnSpacing="5" RowSpacing="10">
+                                <Label Text="Cena: " Style="{StaticResource Input}"/>
+                                <Entry Text="{Binding Item.Price}" Keyboard="Numeric" Grid.Column="1"/>
 
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame Style="{StaticResource CollectionContainer}">
-                                    <Frame.Triggers>
-                                        <DataTrigger TargetType="Frame" Binding="{Binding State}" Value="Sprzedane">
-                                            <Setter Property="Opacity" Value="0.4"/>
-                                        </DataTrigger>
-                                    </Frame.Triggers>
-                                    <VerticalStackLayout>
-                                        <HorizontalStackLayout Margin="15" Padding="5">
-                                            <Entry Text="{Binding Name}" Placeholder="Nazwa" FontSize="20" HorizontalOptions="Center"/>
-                                            <Button Text="Usuń" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveItemCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0" HorizontalOptions="End"/>
-                                            <Button Text="Dodaj Obrazek" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddImageCommand}" CommandParameter="{Binding .}" Margin="10,0,0,0" HorizontalOptions="End"/>
-                                            <Image Source="{Binding ImagePath}" WidthRequest="100" HeightRequest="100" Margin="10,0,0,0" HorizontalOptions="End"/>
-                                        </HorizontalStackLayout>
-                                        <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto, Auto, Auto, Auto" ColumnSpacing="5" RowSpacing="10">
-                                            <Label Text="Cena: " Style="{StaticResource Input}"/>
-                                            <Entry Text="{Binding Price}" Keyboard="Numeric" Grid.Column="1"/>
+                                <Label Text="Status: " Style="{StaticResource Input}" Grid.Column="2"/>
+                                <Picker SelectedItem="{Binding Item.State}" Grid.Column="3">
+                                    <Picker.Items>
+                                        <x:String>Nowe</x:String>
+                                        <x:String>Używane</x:String>
+                                        <x:String>Na sprzedaż</x:String>
+                                        <x:String>Sprzedane</x:String>
+                                        <x:String>Chcę Kupić</x:String>
+                                    </Picker.Items>
+                                </Picker>
 
-                                            <Label Text="Status: " Style="{StaticResource Input}" Grid.Column="2"/>
-                                            <Picker SelectedItem="{Binding State}" Grid.Column="3">
-                                                <Picker.Items>
-                                                    <x:String>Nowe</x:String>
-                                                    <x:String>Używane</x:String>
-                                                    <x:String>Na sprzedaż</x:String>
-                                                    <x:String>Sprzedane</x:String>
-                                                    <x:String>Chcę Kupić</x:String>
-                                                </Picker.Items>
-                                            </Picker>
-
-                                            <Label Text="{Binding Rating, StringFormat='Ocena: {0}'}" Style="{StaticResource Input}" Grid.Row="1"/>
-                                            <Slider Minimum="1" Maximum="10" Value="{Binding Rating}" HorizontalOptions="Fill" Grid.Row="1" Grid.Column="1"/>
+                                <Label Text="{Binding Item.Rating, StringFormat='Ocena: {0}'}" Style="{StaticResource Input}" Grid.Row="1"/>
+                                <Slider Minimum="1" Maximum="10" Value="{Binding Item.Rating}" HorizontalOptions="Fill" Grid.Row="1" Grid.Column="1"/>
 
 
-                                            <Label Text="Rzadkość: " Style="{StaticResource Input}" Grid.Row="1" Grid.Column="2"/>
-                                            <Picker SelectedItem="{Binding Rarity}" Grid.Row="1" Grid.Column="3">
-                                                <Picker.Items>
-                                                    <x:String>Pospolity</x:String>
-                                                    <x:String>Niepospolity</x:String>
-                                                    <x:String>Rzadki</x:String>
-                                                    <x:String>Unikalny</x:String>
-                                                </Picker.Items>
-                                            </Picker>
+                                <Label Text="Rzadkość: " Style="{StaticResource Input}" Grid.Row="1" Grid.Column="2"/>
+                                <Picker SelectedItem="{Binding Item.Rarity}" Grid.Row="1" Grid.Column="3">
+                                    <Picker.Items>
+                                        <x:String>Pospolity</x:String>
+                                        <x:String>Niepospolity</x:String>
+                                        <x:String>Rzadki</x:String>
+                                        <x:String>Unikalny</x:String>
+                                    </Picker.Items>
+                                </Picker>
 
-                                            <Label Text="Kategoria: " Style="{StaticResource Input}" Grid.Row="2" />
-                                            <Picker SelectedItem="{Binding Category}" Grid.Row="2" Grid.Column="1">
-                                                <Picker.Items>
-                                                    <x:String>Gry</x:String>
-                                                    <x:String>Karty</x:String>
-                                                    <x:String>Książki</x:String>
-                                                    <x:String>Płyty</x:String>
-                                                    <x:String>Zabawki</x:String>
-                                                    <x:String>Inne</x:String>
-                                                </Picker.Items>
-                                            </Picker>
+                                <Label Text="Kategoria: " Style="{StaticResource Input}" Grid.Row="2" />
+                                <Picker SelectedItem="{Binding Item.Category}" Grid.Row="2" Grid.Column="1">
+                                    <Picker.Items>
+                                        <x:String>Gry</x:String>
+                                        <x:String>Karty</x:String>
+                                        <x:String>Książki</x:String>
+                                        <x:String>Płyty</x:String>
+                                        <x:String>Zabawki</x:String>
+                                        <x:String>Inne</x:String>
+                                    </Picker.Items>
+                                </Picker>
 
-                                            <Label Text="Komentarz: " Style="{StaticResource Input}" Grid.Row="3" Grid.Column="0"/>
-                                            <Entry Text="{Binding Comment}" HorizontalOptions="Fill" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
-                                        </Grid>
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                <Label Text="Komentarz: " Style="{StaticResource Input}" Grid.Row="3" Grid.Column="0"/>
+                                <Entry Text="{Binding Item.Comment}" HorizontalOptions="Fill" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Frame>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>
